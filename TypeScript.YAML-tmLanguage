@@ -213,7 +213,7 @@ repository:
 
   arrow-function-declaration:
     name: meta.function.ts
-    begin: (?=(.)(?:\([\w\s:]*\)|\w+)\s*=>)
+    begin: (?=(?:\([\w\s,<>\[\]\|:]*\)|\w+)\s*=>)
     end: (?=;|\}|\n|$)|(?<=\})
     patterns:
     - include: '#comment'
@@ -504,7 +504,7 @@ repository:
     match: \b(number|boolean|string|var|let|function|const)\b
 
   paren-expression:
-    begin: \(
+    begin: \((?![\w\s,<>\[\]\|:]*\)\s*=>)
     beginCaptures:
       '0': {name: meta.brace.paren.ts }
     end: \)
