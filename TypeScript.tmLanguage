@@ -63,6 +63,124 @@
 				</dict>
 			</array>
 		</dict>
+		<key>arrow-function-declaration</key>
+		<dict>
+			<key>begin</key>
+			<string>(?=(?:\([\w\s,&lt;&gt;\[\]\|:]*\)|\w+)\s*=&gt;)</string>
+			<key>end</key>
+			<string>(?=;|\}|\n|$)|(?&lt;=\})</string>
+			<key>name</key>
+			<string>meta.function.ts</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#type-parameters</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#arrow-function-type-parameters</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#arrow-function-symbol</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#arrow-function-identifier</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#return-type</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#function-overload-declaration</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decl-block</string>
+				</dict>
+			</array>
+		</dict>
+		<key>arrow-function-identifier</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.ts</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(\w*)\s*(?==&gt;)</string>
+			<key>name</key>
+			<string>meta.arrow.identifier.ts</string>
+		</dict>
+		<key>arrow-function-symbol</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.ts</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>(=&gt;)</string>
+			<key>name</key>
+			<string>meta.arrow.function.ts</string>
+		</dict>
+		<key>arrow-function-type-parameters</key>
+		<dict>
+			<key>begin</key>
+			<string>\((?=.*=&gt;)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.ts</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\)|=&gt;</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.ts</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.function.type.parameter.ts</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#parameter-name</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#type-annotation</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#variable-initializer</string>
+				</dict>
+			</array>
+		</dict>
 		<key>assignment-operator</key>
 		<dict>
 			<key>match</key>
@@ -238,6 +356,10 @@
 				<dict>
 					<key>include</key>
 					<string>#function-declaration</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#arrow-function-declaration</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1045,7 +1167,7 @@
 		<key>paren-expression</key>
 		<dict>
 			<key>begin</key>
-			<string>\(</string>
+			<string>\((?![\w\s,&lt;&gt;\[\]\|:]*\)\s*=&gt;)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>0</key>

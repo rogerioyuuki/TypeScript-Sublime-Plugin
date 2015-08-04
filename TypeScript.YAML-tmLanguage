@@ -11,7 +11,7 @@ patterns:
 repository:
   var-expr:
     name: meta.var.expr.ts
-    begin: (?<!\()\s*\b(var|let|const(?!\s+enum))\s+([a-zA-Z_$][\w$]*) 
+    begin: (?<!\()\s*\b(var|let|const(?!\s+enum))\s+([a-zA-Z_$][\w$]*)
     beginCaptures:
       '1': { name: storage.type.ts }
       '2': { name: variable.ts }
@@ -25,12 +25,12 @@ repository:
     name: keyword.control.ts
     match: \b(break|catch|continue|debugger|declare|do|else|finally|for|if|return|switch|throw|try|while|with|super)\b
 
-  switch-case: 
+  switch-case:
     name: case.expr.ts
     begin: '\b(case|default)\b'
     beginCaptures:
       '1': { name: keyword.control.ts }
-    end: ':'  
+    end: ':'
     patterns:
     - include: '#expression'
 
@@ -38,6 +38,7 @@ repository:
     name: meta.declaration.ts
     patterns:
      - include: '#function-declaration'
+     - include: '#arrow-function-declaration'
      - include: '#object-declaration'
      - include: '#type-declaration'
      - include: '#enum-declaration'
@@ -193,7 +194,7 @@ repository:
     match: ([a-zA-Z_$][\w$]*)(?=\:)
     captures:
       '1': { name: variable.parameter.ts}
-      
+
   function-declaration:
     name: meta.function.ts
     begin: \b(?:(export)\s+)?(function\b)(?:\s+([a-zA-Z_$][\w$]*))?\s*
@@ -209,6 +210,46 @@ repository:
     - include: '#return-type'
     - include: '#function-overload-declaration'
     - include: '#decl-block'
+
+  arrow-function-declaration:
+    name: meta.function.ts
+    begin: (?=(?:\([\w\s,<>\[\]\|:]*\)|\w+)\s*=>)
+    end: (?=;|\}|\n|$)|(?<=\})
+    patterns:
+    - include: '#comment'
+    - include: '#type-parameters'
+    - include: '#arrow-function-type-parameters'
+    - include: '#arrow-function-symbol'
+    - include: '#arrow-function-identifier'
+    - include: '#return-type'
+    - include: '#function-overload-declaration'
+    - include: '#decl-block'
+
+  arrow-function-type-parameters:
+    name: meta.function.type.parameter.ts
+    begin: \((?=.*=>)
+    beginCaptures:
+      '0': { name: entity.name.function.ts }
+    end: \)|=>
+    endCaptures:
+      '0': { name: entity.name.function.ts }
+    patterns:
+    - include: '#comment'
+    - include: '#parameter-name'
+    - include: '#type-annotation'
+    - include: '#variable-initializer'
+
+  arrow-function-identifier:
+    name: meta.arrow.identifier.ts
+    match: (\w*)\s*(?==>)
+    captures:
+      '1': { name: variable.parameter.ts }
+
+  arrow-function-symbol:
+    name: meta.arrow.function.ts
+    match: (=>)
+    captures:
+      '1': { name: keyword.control.ts }
 
   function-overload-declaration:
     name: meta.function.overload.ts
@@ -312,7 +353,7 @@ repository:
     - include: '#comment'
     - include: '#type'
     - include: '#function-type-parameters'
-    
+
   type-operator:
     name: keyword.operator.type.ts
     match: '[.|]'
@@ -350,7 +391,7 @@ repository:
     beginCaptures:
       '1': { name: entity.name.type.ts }
       '2': { name: meta.brace.angle.ts }
-    end: '(?=$)|(>)'  
+    end: '(?=$)|(>)'
     endCaptures:
       '2': { name: meta.brace.angle.ts }
     patterns:
@@ -365,7 +406,7 @@ repository:
       '1': { name: keyword.operator.ts }
     end: (?=$|[,);=])
     patterns:
-      - include: '#expression'  
+      - include: '#expression'
 
   expression:
     name: meta.expression.ts
@@ -391,7 +432,7 @@ repository:
     - include: '#function-call'
     - include: '#control-statement'
     - include: '#switch-case'
-    
+
   for-in-simple:
     name: forin.expr.ts
     match: (?<=\()\s*\b(var|let|const)\s+([a-zA-Z_$][\w$]*)\s+(in|of)\b
@@ -463,7 +504,7 @@ repository:
     match: \b(number|boolean|string|var|let|function|const)\b
 
   paren-expression:
-    begin: \(
+    begin: \((?![\w\s,<>\[\]\|:]*\)\s*=>)
     beginCaptures:
       '0': {name: meta.brace.paren.ts }
     end: \)
@@ -579,7 +620,7 @@ repository:
     - include: '#expression'
 
   numeric-literal:
-    name: constant.numeric.ts 
+    name: constant.numeric.ts
     match: \b(?<=[^$])((0(x|X)[0-9a-fA-F]+)|([0-9]+(\.[0-9]+)?))\b
 
   boolean-literal:
@@ -589,11 +630,11 @@ repository:
   null-literal:
     name: constant.language.null.ts
     match: \b(null)\b
-  
+
   this-literal:
     name: constant.language.this.ts
     match: \b(this)\b
-      
+
   undefined-literal:
     name: constant.language.ts
     match: \b(undefined)\b
@@ -601,7 +642,7 @@ repository:
   access-modifier:
     name: storage.modifier.ts
     match: \b(public|protected|private)\b
-    
+
   static-modifier:
     name: keyword.other.ts
     match: \b(static)\b
